@@ -1,16 +1,9 @@
-# install
+# Install
 ```
 yarn && npm link
 ```
 
-# use
+# Usage
 ```
-nodes --dist {distpath} --proxy {proxy0}={PROXY}
-```
-
-# simple use
-
-default load `path.join(path.resolve(),'dist')`
-```bash
-nodes 
+nodes [--dist, {distpath}, --proxy, {proxy0}={PROXY}]
 ```

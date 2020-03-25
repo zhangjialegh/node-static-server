@@ -5,22 +5,31 @@ const static = require('koa-static')
 const httpProxyMiddleware = require('http-proxy-middleware')
 const koaConnect = require('koa2-connect')
 
-const proxyLabel = '--proxy'
-const pathLabel = '--dist'
+const proxyPrefix = '--proxy'
+const pathPrefix = '--dist'
+const portPrefix = '--port'
 const proxyTable = {}
+let distName = 'dist'
+let port = 5000
 
 const app = new Koa()
 const commander = process.argv.slice(2)
 
-let distRoot = path.join(path.resolve(), 'dist')
+let distRoot = path.join(path.resolve(), distName)
 
 // 判断是否有代理需求
 if (commander.length) {
-  if (commander.includes(proxyLabel)) {
+  if (commander.includes(portPrefix)) {
+    const portIndex = commander.indexOf(portPrefix)
+    if (commander[portIndex+1]) {
+      port = commander[portIndex+1]
+    }
+  }
+  if (commander.includes(proxyPrefix)) {
     const ids = []
-    const distPath = commander.indexOf(pathLabel)
+    const distPath = commander.indexOf(pathPrefix)
     commander.forEach((item,index) => {
-      if (item === proxyLabel) {
+      if (item === proxyPrefix) {
         ids.push(index)
       }
     })
@@ -68,4 +77,4 @@ Object.keys(proxyTable).map(context => {
   app.use(proxy(context, options))
 })
 
-app.listen(5000, () => console.log('processing on port 5000'))
+app.listen(port, () => console.log(`processing on port ${port}`))
